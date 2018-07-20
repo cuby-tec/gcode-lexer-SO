@@ -206,7 +206,7 @@ void gpunct(size_t curline, char * param, size_t len)
 // 		punct			Symbols.
 
 
-#line 332 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 327 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 
 
 
@@ -216,145 +216,151 @@ static const char _gparcer_actions[] = {
 	3, 1, 6, 1, 7, 1, 8, 1, 
 	9, 1, 10, 2, 5, 1, 2, 6, 
 	1, 2, 6, 3, 2, 7, 0, 2, 
-	7, 4, 2, 8, 3, 2, 9, 0, 
-	2, 9, 6, 2, 10, 0, 3, 6, 
-	5, 1
+	7, 4, 2, 8, 0, 2, 8, 3, 
+	2, 9, 0, 2, 9, 6, 2, 10, 
+	0, 3, 6, 5, 1
 };
 
 static const unsigned char _gparcer_key_offsets[] = {
 	0, 0, 1, 4, 5, 10, 14, 16, 
-	18, 21, 25, 27, 31, 33, 36, 38, 
-	43, 52, 53, 64, 80, 82, 96, 98, 
-	111, 114, 116, 120, 133, 138, 138, 139, 
-	142, 150, 159, 161, 162, 165, 171, 176, 
-	179, 182, 182, 182
+	18, 21, 23, 25, 29, 31, 35, 37, 
+	40, 42, 47, 56, 57, 68, 84, 86, 
+	100, 102, 115, 118, 120, 124, 137, 142, 
+	142, 143, 146, 154, 163, 165, 166, 169, 
+	175, 180, 183, 186, 192, 197, 197, 197
 };
 
 static const char _gparcer_trans_keys[] = {
 	41, 127, 0, 31, 41, 127, 0, 31, 
 	32, 126, 41, 127, 0, 31, 48, 57, 
-	48, 57, 127, 0, 31, 43, 45, 48, 
-	57, 48, 57, 10, 46, 48, 57, 48, 
-	57, 10, 48, 57, 48, 57, 10, 32, 
-	46, 48, 57, 10, 32, 40, 42, 59, 
-	65, 90, 97, 122, 41, 10, 32, 40, 
+	48, 57, 127, 0, 31, 48, 57, 48, 
+	57, 43, 45, 48, 57, 48, 57, 10, 
+	46, 48, 57, 48, 57, 10, 48, 57, 
+	48, 57, 10, 32, 46, 48, 57, 10, 
+	32, 40, 42, 59, 65, 90, 97, 122, 
+	41, 10, 32, 40, 42, 59, 9, 13, 
+	65, 90, 97, 122, 10, 32, 40, 42, 
+	43, 45, 46, 59, 9, 13, 48, 57, 
+	65, 90, 97, 122, 48, 57, 10, 32, 
+	40, 42, 46, 59, 9, 13, 48, 57, 
+	65, 90, 97, 122, 48, 57, 10, 32, 
+	40, 42, 59, 9, 13, 48, 57, 65, 
+	90, 97, 122, 127, 0, 31, 48, 57, 
+	10, 32, 48, 57, 10, 40, 59, 70, 
+	71, 77, 79, 0, 82, 83, 84, 85, 
+	127, 10, 40, 59, 0, 127, 10, 10, 
+	40, 59, 10, 40, 59, 127, 0, 31, 
+	32, 126, 10, 40, 41, 59, 127, 0, 
+	31, 32, 126, 10, 41, 41, 127, 0, 
+	31, 10, 40, 46, 59, 48, 57, 10, 
+	40, 59, 48, 57, 10, 40, 59, 10, 
+	40, 59, 10, 40, 46, 59, 48, 57, 
+	10, 40, 59, 48, 57, 10, 32, 40, 
 	42, 59, 9, 13, 65, 90, 97, 122, 
-	10, 32, 40, 42, 43, 45, 46, 59, 
-	9, 13, 48, 57, 65, 90, 97, 122, 
-	48, 57, 10, 32, 40, 42, 46, 59, 
-	9, 13, 48, 57, 65, 90, 97, 122, 
-	48, 57, 10, 32, 40, 42, 59, 9, 
-	13, 48, 57, 65, 90, 97, 122, 127, 
-	0, 31, 48, 57, 10, 32, 48, 57, 
-	10, 40, 59, 70, 71, 77, 79, 0, 
-	82, 83, 84, 85, 127, 10, 40, 59, 
-	0, 127, 10, 10, 40, 59, 10, 40, 
-	59, 127, 0, 31, 32, 126, 10, 40, 
-	41, 59, 127, 0, 31, 32, 126, 10, 
-	41, 41, 127, 0, 31, 10, 40, 46, 
-	59, 48, 57, 10, 40, 59, 48, 57, 
-	10, 40, 59, 10, 40, 59, 10, 32, 
-	40, 42, 59, 9, 13, 65, 90, 97, 
-	122, 0
+	0
 };
 
 static const char _gparcer_single_lengths[] = {
 	0, 1, 1, 1, 1, 2, 0, 0, 
-	1, 2, 0, 2, 0, 1, 0, 3, 
-	5, 1, 5, 8, 0, 6, 0, 5, 
-	1, 0, 2, 7, 3, 0, 1, 3, 
-	4, 5, 2, 1, 1, 4, 3, 3, 
-	3, 0, 0, 5
+	1, 0, 0, 2, 0, 2, 0, 1, 
+	0, 3, 5, 1, 5, 8, 0, 6, 
+	0, 5, 1, 0, 2, 7, 3, 0, 
+	1, 3, 4, 5, 2, 1, 1, 4, 
+	3, 3, 3, 4, 3, 0, 0, 5
 };
 
 static const char _gparcer_range_lengths[] = {
 	0, 0, 1, 0, 2, 1, 1, 1, 
 	1, 1, 1, 1, 1, 1, 1, 1, 
-	2, 0, 3, 4, 1, 4, 1, 4, 
-	1, 1, 1, 3, 1, 0, 0, 0, 
-	2, 2, 0, 0, 1, 1, 1, 0, 
-	0, 0, 0, 3
+	1, 1, 2, 0, 3, 4, 1, 4, 
+	1, 4, 1, 1, 1, 3, 1, 0, 
+	0, 0, 2, 2, 0, 0, 1, 1, 
+	1, 0, 0, 1, 1, 0, 0, 3
 };
 
 static const unsigned char _gparcer_index_offsets[] = {
 	0, 0, 2, 5, 7, 11, 15, 17, 
-	19, 22, 26, 28, 32, 34, 37, 39, 
-	44, 52, 54, 63, 76, 78, 89, 91, 
-	101, 104, 106, 110, 121, 126, 127, 129, 
-	133, 140, 148, 151, 153, 156, 162, 167, 
-	171, 175, 176, 177
+	19, 22, 24, 26, 30, 32, 36, 38, 
+	41, 43, 48, 56, 58, 67, 80, 82, 
+	93, 95, 105, 108, 110, 114, 125, 130, 
+	131, 133, 137, 144, 152, 155, 157, 160, 
+	166, 171, 175, 179, 185, 190, 191, 192
 };
 
 static const char _gparcer_indicies[] = {
 	1, 0, 1, 1, 2, 4, 3, 1, 
 	1, 5, 2, 8, 7, 7, 6, 9, 
-	10, 11, 10, 13, 13, 12, 14, 14, 
-	15, 10, 15, 10, 16, 17, 15, 10, 
-	18, 10, 16, 18, 10, 19, 10, 20, 
-	21, 22, 19, 10, 23, 24, 25, 26, 
-	27, 26, 26, 10, 29, 28, 31, 30, 
-	25, 26, 27, 30, 26, 26, 10, 33, 
-	32, 34, 35, 36, 36, 37, 39, 32, 
-	38, 35, 35, 10, 38, 10, 33, 32, 
-	34, 35, 37, 39, 32, 38, 35, 35, 
-	10, 40, 10, 33, 32, 34, 35, 39, 
-	32, 40, 35, 35, 10, 29, 29, 41, 
-	42, 10, 20, 21, 42, 10, 44, 45, 
-	46, 47, 48, 48, 49, 10, 47, 10, 
-	43, 51, 0, 2, 10, 50, 10, 51, 
-	10, 52, 53, 54, 10, 55, 56, 57, 
-	1, 1, 5, 2, 58, 56, 60, 56, 
-	7, 7, 59, 6, 61, 1, 0, 1, 
-	0, 1, 1, 2, 51, 0, 62, 2, 
-	9, 10, 51, 0, 2, 11, 10, 51, 
-	0, 2, 10, 63, 64, 65, 10, 10, 
-	10, 31, 30, 25, 26, 27, 30, 26, 
-	26, 10, 0
+	10, 11, 10, 13, 13, 12, 14, 10, 
+	15, 10, 16, 16, 17, 10, 17, 10, 
+	18, 19, 17, 10, 20, 10, 18, 20, 
+	10, 21, 10, 22, 23, 24, 21, 10, 
+	25, 26, 27, 28, 29, 28, 28, 10, 
+	31, 30, 33, 32, 27, 28, 29, 32, 
+	28, 28, 10, 35, 34, 36, 37, 38, 
+	38, 39, 41, 34, 40, 37, 37, 10, 
+	40, 10, 35, 34, 36, 37, 39, 41, 
+	34, 40, 37, 37, 10, 42, 10, 35, 
+	34, 36, 37, 41, 34, 42, 37, 37, 
+	10, 31, 31, 43, 44, 10, 22, 23, 
+	44, 10, 46, 47, 48, 49, 50, 50, 
+	51, 10, 52, 10, 45, 54, 0, 2, 
+	10, 53, 10, 54, 10, 55, 56, 57, 
+	10, 58, 59, 60, 1, 1, 5, 2, 
+	61, 59, 63, 59, 7, 7, 62, 6, 
+	64, 1, 0, 1, 0, 1, 1, 2, 
+	65, 66, 67, 68, 9, 10, 65, 66, 
+	68, 11, 10, 54, 0, 2, 10, 69, 
+	70, 71, 10, 54, 0, 72, 2, 14, 
+	10, 54, 0, 2, 15, 10, 10, 10, 
+	33, 32, 27, 28, 29, 32, 28, 28, 
+	10, 0
 };
 
 static const char _gparcer_trans_targs[] = {
-	1, 30, 2, 3, 31, 32, 5, 34, 
-	36, 37, 0, 38, 8, 40, 10, 11, 
-	41, 12, 13, 15, 42, 16, 25, 42, 
-	16, 17, 19, 24, 17, 18, 18, 43, 
-	18, 43, 17, 19, 20, 22, 21, 24, 
-	23, 24, 26, 28, 29, 3, 4, 6, 
-	39, 8, 28, 29, 29, 1, 2, 30, 
-	33, 32, 34, 33, 32, 35, 7, 29, 
-	1, 2
+	1, 32, 2, 3, 33, 34, 5, 36, 
+	38, 39, 0, 40, 8, 42, 43, 44, 
+	12, 13, 45, 14, 15, 17, 46, 18, 
+	27, 46, 18, 19, 21, 26, 19, 20, 
+	20, 47, 20, 47, 19, 21, 22, 24, 
+	23, 26, 25, 26, 28, 30, 31, 3, 
+	4, 6, 41, 8, 9, 30, 31, 31, 
+	1, 2, 32, 35, 34, 36, 35, 34, 
+	37, 31, 1, 7, 2, 31, 1, 2, 
+	10
 };
 
 static const char _gparcer_trans_actions[] = {
 	0, 9, 0, 0, 9, 0, 0, 9, 
-	9, 3, 0, 3, 0, 0, 0, 0, 
-	7, 0, 0, 3, 34, 13, 5, 7, 
-	0, 19, 19, 19, 3, 22, 0, 7, 
-	9, 25, 46, 46, 3, 3, 3, 46, 
-	3, 3, 3, 11, 11, 11, 11, 11, 
-	31, 11, 0, 0, 15, 15, 15, 40, 
-	15, 15, 40, 0, 9, 0, 5, 17, 
-	17, 17
+	9, 3, 0, 3, 0, 0, 3, 3, 
+	0, 0, 7, 0, 0, 3, 37, 13, 
+	5, 7, 0, 19, 19, 19, 3, 22, 
+	0, 7, 9, 25, 49, 49, 3, 3, 
+	3, 49, 3, 3, 3, 11, 11, 11, 
+	11, 11, 31, 11, 11, 0, 0, 15, 
+	15, 15, 43, 15, 15, 43, 0, 9, 
+	0, 13, 13, 5, 13, 17, 17, 17, 
+	5
 };
 
 static const char _gparcer_eof_actions[] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 28, 1, 1, 1, 37, 
-	37, 37, 1, 1, 1, 1, 1, 1, 
-	43, 0, 0, 0
+	0, 0, 0, 0, 0, 28, 1, 1, 
+	1, 40, 40, 40, 1, 1, 1, 34, 
+	34, 1, 46, 1, 1, 0, 0, 0
 };
 
-static const int gparcer_start = 27;
-static const int gparcer_first_final = 27;
+static const int gparcer_start = 29;
+static const int gparcer_first_final = 29;
 static const int gparcer_error = 0;
 
-static const int gparcer_en_date = 9;
-static const int gparcer_en_gname = 14;
-static const int gparcer_en_main = 27;
+static const int gparcer_en_date = 11;
+static const int gparcer_en_gname = 16;
+static const int gparcer_en_main = 29;
 
 
-#line 335 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 330 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 
 
 struct format fsm;
@@ -381,13 +387,13 @@ void format_init( struct format *fsm )
 	fsm->curline = 1;
 	fsm->state = 0;
 	
-#line 385 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
+#line 391 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
 	{
 	( fsm->cs) = gparcer_start;
 	( fsm->top) = 0;
 	}
 
-#line 361 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 356 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 }
 static int strnum = 0;
 void format_execute( struct format *fsm, char *data, int len, int isEof )
@@ -404,7 +410,7 @@ void format_execute( struct format *fsm, char *data, int len, int isEof )
 	if(len == 0)
 		return;
 	
-#line 408 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
+#line 414 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -501,7 +507,7 @@ _match:
 	{
 //		append(fc);
 //		printf("NAME: %c\n",fc);
-		{( fsm->stack)[( fsm->top)++] = ( fsm->cs); ( fsm->cs) = 14; goto _again;} 
+		{( fsm->stack)[( fsm->top)++] = ( fsm->cs); ( fsm->cs) = 16; goto _again;} 
 	}
 	break;
 	case 5:
@@ -525,24 +531,19 @@ _match:
 		resetBuffer();
 		append((*( fsm->p)));
 		//printf("start_tag: %c\n",fc);
-		//start_command
-	//	(*prs[eStartCommand])(fsm->curline ,fsm->p,fsm->pe - fsm->p);
-		char *nn = "nn_nn";
-		(*prs[eStartCommand])(1 ,nn,strlen(nn));
-//		start_command(1 ,nn,strlen(nn));
-//		printf("B Start command.");
+		(*prs[eStartCommand])(fsm->curline ,fsm->p,buffer_index);
 	}
 	break;
 	case 8:
-#line 274 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 269 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
-		(*prs[eGcommand])(fsm->curline ,gBuffer,buffer_index-gts);
+//		(*prs[eGcommand])(fsm->curline ,gBuffer,buffer_index-gts);
 		fwrite( gBuffer, 1, buffer_index, stdout );
 		printf("\ncommand_index: %c\n",(*( fsm->p)));
 	}
 	break;
 	case 9:
-#line 280 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 275 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
 		(*prs[eComment])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
 		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
@@ -550,14 +551,14 @@ _match:
 	}
 	break;
 	case 10:
-#line 286 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 281 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
 		(*prs[eOcommand])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
 		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
 		printf("\nend_otag: %c\n",(*( fsm->p)));
 	}
 	break;
-#line 561 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
+#line 562 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
 		}
 	}
 
@@ -588,16 +589,19 @@ _again:
 		resetBuffer();
 		append((*( fsm->p)));
 		//printf("start_tag: %c\n",fc);
-		//start_command
-	//	(*prs[eStartCommand])(fsm->curline ,fsm->p,fsm->pe - fsm->p);
-		char *nn = "nn_nn";
-		(*prs[eStartCommand])(1 ,nn,strlen(nn));
-//		start_command(1 ,nn,strlen(nn));
-//		printf("B Start command.");
+		(*prs[eStartCommand])(fsm->curline ,fsm->p,buffer_index);
+	}
+	break;
+	case 8:
+#line 269 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+	{
+//		(*prs[eGcommand])(fsm->curline ,gBuffer,buffer_index-gts);
+		fwrite( gBuffer, 1, buffer_index, stdout );
+		printf("\ncommand_index: %c\n",(*( fsm->p)));
 	}
 	break;
 	case 9:
-#line 280 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 275 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
 		(*prs[eComment])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
 		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
@@ -605,14 +609,14 @@ _again:
 	}
 	break;
 	case 10:
-#line 286 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 281 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
 		(*prs[eOcommand])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
 		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
 		printf("\nend_otag: %c\n",(*( fsm->p)));
 	}
 	break;
-#line 616 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
+#line 620 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
 		}
 	}
 	}
@@ -620,7 +624,7 @@ _again:
 	_out: {}
 	}
 
-#line 377 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 372 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	
 		if ( format_finish( fsm ) <= 0 ){
 //			int as = 1;

@@ -263,16 +263,11 @@ void gpunct(size_t curline, char * param, size_t len)
 		resetBuffer();
 		append(fc);
 		//printf("start_tag: %c\n",fc);
-		//start_command
-	//	(*prs[eStartCommand])(fsm->curline ,fsm->p,fsm->pe - fsm->p);
-		char *nn = "nn_nn";
-		(*prs[eStartCommand])(1 ,nn,strlen(nn));
-//		start_command(1 ,nn,strlen(nn));
-//		printf("B Start command.");
+		(*prs[eStartCommand])(fsm->curline ,fsm->p,buffer_index);
 	}
 	
 	action command_index{
-		(*prs[eGcommand])(fsm->curline ,gBuffer,buffer_index-gts);
+//		(*prs[eGcommand])(fsm->curline ,gBuffer,buffer_index-gts);
 		fwrite( gBuffer, 1, buffer_index, stdout );
 		printf("\ncommand_index: %c\n",fc);
 	}
@@ -321,7 +316,7 @@ void gpunct(size_t curline, char * param, size_t len)
 	
 	# The main parser.
 	block =( ( 'G'|'M' )  @call_gblock |  'O' o_tag | (extend-ascii)*
-	| ('F' gindex ) | ('T' gindex) | 'S' gindex 
+	| ('F' gindex )%command_index | ('T' gindex) | 'S' gindex 
 	| ';' comment  | ('(' (any)* :>> ')')%end_comment )>start_tag;
 	
 	main := (block (l_com)? '\n'? | ('' '\n')? ) %finish_ok;	

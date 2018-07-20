@@ -1,6 +1,6 @@
 #include "ghelper.h"
 #include <string.h>
-
+#include <stdio.h>
 
 //--------------------- vars
 
@@ -77,7 +77,8 @@ void b_x_coordinate(size_t curline, char * param, size_t len)
     sgcode.param_number++;
 }
 
-void b_y_coordinate(size_t curline, char * param, size_t len)
+//void b_y_coordinate(size_t curline, char * param, size_t len)
+void b_o_command (size_t curline, char * param, size_t len) // O command
 {
     struct sGparam *pr =  &sgcode.param[sgcode.param_number];
 //    pr->group = param[0];
@@ -87,163 +88,13 @@ void b_y_coordinate(size_t curline, char * param, size_t len)
     sgcode.param_number++;
 }
 
-void b_z_coordinate(size_t curline, char * param, size_t len)
+void
+b_startCommand(size_t curline, char * param, size_t len)
 {
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-//    pr->group = param[0];
-//    strncpy(pr->value,param+1,(len<10)?len-1:9);
-//    pr->value[(len<10)?len-1:9] = '\0';
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
+	memset(&sgcode,0,sizeof(struct sGcode));
+	sgcode.group = *param;
+	fwrite( &sgcode.group, 1, len, stdout );
+	printf("\n\tStart command: curline:%li \n ",curline);
 
-void b_a_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_b_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_c_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-void b_d_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_e_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_f_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_i_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_j_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_k_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_l_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-// Command M
-void b_m_parameter(size_t curline, char * param, size_t len)
-{
-    //     'M': Command
-            sgcode.group = param[0];
-            strncpy(sgcode.value,&param[1],(len<10)?len-1:9);
-            sgcode.value[len-1] = '\0';
 
 }
-
-void b_n_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_p_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-
-}
-
-void b_r_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-
-}
-
-void b_s_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_t_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_u_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_v_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_w_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_star_parameter(size_t curline, char * param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
-void b_punct(size_t curline, char* param, size_t len)
-{
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-    ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
-}
-
