@@ -58,7 +58,7 @@ void b_gcomment (size_t curline, char * param, size_t len)
 {
 //sgcode.comment
     memcpy(sgcode.comment, param, (len<79)?len:79);
-    printf("_h_Comment: %s",sgcode.comment);
+//    printf("_h_Comment: %s",sgcode.comment);
 }
 
 void b_g_command (size_t curline, char * param, size_t len)
@@ -114,7 +114,7 @@ b_startCommand(size_t curline, char * param, size_t len)
 		sgcode.line = curline;
 	}
 
-	printf("\n\t_h_Start command: curline:%li \n ",curline);
+//	printf("\n\t_h_Start command: curline:%li \n ",curline);
 
 
 }
@@ -132,7 +132,7 @@ h_add_lineNumber(char* param, size_t len)
 	lineNumber.group = param[0];
 	strncpy(lineNumber.value,param+1,(len<10)?len-1:9);
 
-	printf("\t_h_Line number: group:%c  value:%s \n ", lineNumber.group, lineNumber.value);
+//	printf("\t_h_Line number: group:%c  value:%s \n ", lineNumber.group, lineNumber.value);
 }
 
 

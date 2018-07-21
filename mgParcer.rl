@@ -281,7 +281,7 @@ void gpunct(size_t curline, char * param, size_t len)
 		(*prs[eComment])(fsm->curline ,start_tag,fsm->p - start_tag);
 //		printf("end_comment>\n");
 //		fwrite( start_tag, 1, fsm->p - start_tag, stdout );
-		printf("\nend_comment: %c\n",fc);
+//		printf("\nend_comment: %c\n",fc);
 	}
 	
 	action end_otag{
