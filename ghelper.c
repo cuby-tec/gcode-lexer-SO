@@ -105,10 +105,13 @@ b_startCommand(size_t curline, char * param, size_t len)
 	if(lineNumber.group>0)
 	{
 		//add param
-		struct sGparam *dst = &sgcode.param[sgcode.param_number];
-		dst->group = lineNumber.group;
-		strcpy(dst->value,lineNumber.value);
-		sgcode.param_number++;
+//		struct sGparam *dst = &sgcode.param[sgcode.param_number];
+//		dst->group = lineNumber.group;
+//		strcpy(dst->value,lineNumber.value);
+//		sgcode.param_number++;
+		sgcode.line =   atoi(lineNumber.value);
+	}else{
+		sgcode.line = curline;
 	}
 
 	printf("\n\t_h_Start command: curline:%li \n ",curline);
