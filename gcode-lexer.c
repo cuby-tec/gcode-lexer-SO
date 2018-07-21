@@ -11,18 +11,18 @@
 
 int setBuffer(char* buf, size_t len)
 {
-	int result;
+	int result = 0;
 
 	init();
 
-	execute(buf,len);
+	result = execute(buf,len);
 
 	return result;
 }
 
 struct sGcode* getGcode()
 {
-	struct sGcode* result;
+	struct sGcode* result = 0;
 
 
 
@@ -31,7 +31,7 @@ struct sGcode* getGcode()
 
 char* getErrorComment()
 {
-	char* result;
+	char* result = "";
 
 
 

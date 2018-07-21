@@ -18,6 +18,8 @@
 #include <stdbool.h>
 #include <assert.h>
 
+//#include "ghelper.h"
+
 #define FLOG_no
 #define SCANNER
 
@@ -34,6 +36,8 @@ extern void b_o_command (size_t curline, char * param, size_t len); // O command
 extern void b_x_coordinate(size_t curline, char * param, size_t len);
 extern void b_startCommand(size_t curline, char * param, size_t len);
 
+extern void h_add_lineNumber(char* param, size_t len);
+
 //extern void b_punct(curline, param, len);
 #endif
 
@@ -42,7 +46,7 @@ extern void b_startCommand(size_t curline, char * param, size_t len);
 
 //extern void scanner();
 
-extern void execute(char *data, int len);
+extern int execute(char *data, int len);
 
 extern void init();
 

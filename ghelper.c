@@ -5,7 +5,7 @@
 //--------------------- vars
 
 struct sGcode sgcode;
-
+struct sGparam lineNumber;
 //----------------------- function
 
 
@@ -92,9 +92,20 @@ void
 b_startCommand(size_t curline, char * param, size_t len)
 {
 	memset(&sgcode,0,sizeof(struct sGcode));
+	memset(&lineNumber,0,sizeof(struct sGparam));
 	sgcode.group = *param;
 	fwrite( &sgcode.group, 1, len, stdout );
-	printf("\n\tStart command: curline:%li \n ",curline);
-
+	printf("\n\t_h_Start command: curline:%li \n ",curline);
 
 }
+
+void
+h_add_lineNumber(char* param, size_t len)
+{
+
+	lineNumber.group = param[0];
+	 memcpy(lineNumber.value,&param[1],len-1);
+	fwrite(param,1,len, stdout);
+	printf("\t_h_Line number: group:%c  value:%s \n ",lineNumber.group, lineNumber.value);
+}
+

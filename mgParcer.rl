@@ -85,6 +85,9 @@ static gfunction parser_out;
  void x_coordinate(size_t curline, char * param, size_t len);
  void o_command (size_t curline, char * param, size_t len);
 void start_command(size_t curline, char * param, size_t len);//eStartCommand
+
+//void h_add_lineNumber(char* param, size_t len);
+
  //fprintf(flog, "symbol(%i): %c\n", fsm->curline, fsm->ts[0] );
 // void gpunct(size_t curline, char * param, size_t len);
 
@@ -99,6 +102,7 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate, &o_command
  size_t buffer_index = 0;
  size_t param_index;
  size_t gts;
+ char* start_tag;
 
 void append(char ch)
 {
@@ -285,10 +289,19 @@ void gpunct(size_t curline, char * param, size_t len)
 	}
 	
 	action end_command{
-//		/eCommand
-		(*prs[eCommand])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
+//		/eCommand  start_tag, 1, fsm->p - start_tag, stdout
+		(*prs[eCommand])(fsm->curline ,start_tag,fsm->p - start_tag);
 		
 	}
+	
+	action line_number{
+//		void h_add_lineNumber(char* param, size_t len)
+		h_add_lineNumber(fsm->buf, fsm->p - fsm->buf);
+//		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
+//		printf("\tline_number: %i\n",fc);
+		start_tag = fsm->p;
+	}
+	
 	
 	# A parser for date strings.
 	date := decimal  '\n' @return;
@@ -315,7 +328,7 @@ void gpunct(size_t curline, char * param, size_t len)
 	o_tag = ( (any)* :> cntrl ) %end_otag ;
 	
 	# The main parser.
-	block =( ( 'G'|'M' )  @call_gblock |  'O' o_tag | (extend-ascii)*
+	block =(('N' gindex)%line_number .' '*)?( ( 'G'|'M' )  @call_gblock |  'O' o_tag | (extend-ascii)*
 	| ('F' gindex )%command_index | ('T' gindex) | 'S' gindex 
 	| ';' comment  | ('(' (any)* :>> ')')%end_comment )>start_tag;
 	
@@ -355,7 +368,7 @@ void format_init( struct format *fsm )
 	%% write init;
 }
 static int strnum = 0;
-void format_execute( struct format *fsm, char *data, int len, int isEof )
+int format_execute( struct format *fsm, char *data, int len, int isEof )
 {
 //	const char *p = data;
 //	const char *pe = data + len;
@@ -365,9 +378,10 @@ void format_execute( struct format *fsm, char *data, int len, int isEof )
 	fsm->p = data;
 	fsm->pe = data+len;
 	fsm->eof = isEof ? fsm->pe : 0;
+	start_tag = data;
 	printf("format_execute[892]: len:%d  done:%d line:%d \n",len,fsm->done,fsm->curline);
 	if(len == 0)
-		return;
+		return(0);
 	%% write exec;
 	
 		if ( format_finish( fsm ) <= 0 ){
@@ -376,16 +390,16 @@ void format_execute( struct format *fsm, char *data, int len, int isEof )
 			assert(format_finish( fsm ) >= 1) ;
 		}
 
-	
+	return (format_finish( fsm ));
 }
 
 void init(){
 	format_init(&fsm);
 }
 
-void execute(char *data, int len){
+int execute(char *data, int len){
 	fsm.done = 0;
-	format_execute(&fsm, data, len, true);
+	return(format_execute(&fsm, data, len, true));
 }
 
 int finish(){
