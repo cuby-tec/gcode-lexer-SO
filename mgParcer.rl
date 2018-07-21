@@ -304,6 +304,9 @@ void gpunct(size_t curline, char * param, size_t len)
 		start_tag = fsm->p;
 	}
 	
+	action f_comment{
+		printf("f_comment\n");
+	}
 	
 	# A parser for date strings.
 	date := decimal  '\n' @return;
@@ -326,7 +329,7 @@ void gpunct(size_t curline, char * param, size_t len)
 	f_comment = (';' (print)* )?;
 	
 	# A parser for name strings.
-	gname := (( gindex)%command_index space+ ((( (param) space+ )*)?   )( print*) '\n') @return;
+	gname := (( gindex)%command_index space+ ((( (param) space+ )*)? )  ((';' print*)>f_comment ) '\n') @return;
 
 	#Comment content
 	comment = ( (print)+  ) %end_comment ;
