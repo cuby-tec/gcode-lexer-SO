@@ -38,6 +38,8 @@ extern void b_startCommand(size_t curline, char * param, size_t len);
 
 extern void h_add_lineNumber(char* param, size_t len);
 
+extern void b_endtag();
+
 //extern void b_punct(curline, param, len);
 #endif
 

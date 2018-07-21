@@ -77,7 +77,7 @@ char buf[INPUT_BUFSIZE];
 	FILE *flog;
 //static void (* parser_out)(size_t number, char * param, size_t len);
 
-static gfunction parser_out;
+//static gfunction parser_out;
 
  void command (size_t curline, char * param, size_t len);
  void gcomment (size_t curline, char * param, size_t len);
@@ -230,6 +230,7 @@ void gpunct(size_t curline, char * param, size_t len)
 //		if ( fsm->buflen > 0 )
 //			fsm->write( fsm->buf, fsm->buflen );
 //		fwrite("End\n",1,4,stdout);
+		b_endtag();
 		printf("\n action finish_ok.\n");
 	}
 	
@@ -277,8 +278,9 @@ void gpunct(size_t curline, char * param, size_t len)
 	}
 	
 	action end_comment{
-		(*prs[eComment])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
-		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
+		(*prs[eComment])(fsm->curline ,start_tag,fsm->p - start_tag);
+//		printf("end_comment>\n");
+//		fwrite( start_tag, 1, fsm->p - start_tag, stdout );
 		printf("\nend_comment: %c\n",fc);
 	}
 	
