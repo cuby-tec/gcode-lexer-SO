@@ -313,16 +313,20 @@ void gpunct(size_t curline, char * param, size_t len)
 	
 	#Local commentary
 	#l_com = ( (';' (any)* :>> cntrl)) @end_param ;
-	l_com = (( '('(any)* :>> ')') | (';' (any)* :>> cntrl)) @end_param ;
+	#l_com = (( '('(any)* :>> ')') | (';' (any)* :>> cntrl)) @end_param ;
+	l_com = (( '('(any)* :>> ')') ) ;
 	
+	#f_comment = ( (print)+ );
 	malpha = [A-Za-z*];
 	
-	param_data = ((malpha) ([+\-]? digit+)? ('.' digit+)? )%end_param ; 
+	#param_data = ((malpha) ([+\-]? digit+)? ('.' digit+)? )%end_param ;
+	param_data = ((malpha) ([+\-]? digit+)? ('.' digit+)? ) ;
 	
-	param = ((param_data) | ( l_com  ) )>start_param $dgt ;
+	param = ((param_data) | ( l_com  ) )>start_param $dgt %end_param ;
+	f_comment = (';' (print)* )?;
 	
 	# A parser for name strings.
-	gname := (( gindex)%command_index (' '+ ( (param).(space)* )*)?  '\n') @return;
+	gname := (( gindex)%command_index space+ ((( (param) space+ )*)?   )( print*) '\n') @return;
 
 	#Comment content
 	comment = ( (print)+  ) %end_comment ;
@@ -334,7 +338,7 @@ void gpunct(size_t curline, char * param, size_t len)
 	| ('F' gindex )%command_index | ('T' gindex) | 'S' gindex 
 	| ';' comment  | ('(' (any)* :>> ')')%end_comment )>start_tag;
 	
-	main := (block (l_com)? '\n'? | ('' '\n')? ) %finish_ok;	
+	main := space*(block (l_com)? '\n'? | ('' '\n')? ) %finish_ok;	
 	
 	
 	
