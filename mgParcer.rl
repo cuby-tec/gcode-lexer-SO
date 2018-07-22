@@ -103,7 +103,8 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate, &o_command
  size_t param_index;
  size_t gts;
  char* start_tag;
-
+ int has_return;
+ 
 void append(char ch)
 {
 	gBuffer[buffer_index++] = ch;
@@ -230,6 +231,7 @@ void gpunct(size_t curline, char * param, size_t len)
 //		if ( fsm->buflen > 0 )
 //			fsm->write( fsm->buf, fsm->buflen );
 //		fwrite("End\n",1,4,stdout);
+		has_return = 1;
 		b_endtag();
 		printf("\n action finish_ok.\n");
 	}
@@ -245,7 +247,11 @@ void gpunct(size_t curline, char * param, size_t len)
 	}
 
 
-	action return { printf("RETURN\n"); fret; }
+	action return { 
+		has_return = 1;
+		printf("RETURN\n"); 
+		fret; 
+	}
 	
 	action call_gblock {
 //		append(fc);
@@ -261,7 +267,7 @@ void gpunct(size_t curline, char * param, size_t len)
 	action end_param {
 		(*prs[eXparam])(fsm->curline ,&gBuffer[gts],buffer_index - gts);
 		fwrite( &gBuffer[gts], 1, buffer_index - gts, stdout );
-		printf("\n\tend_param: %c\n",fc); 
+		printf("\n\tend_param: %i\n",fc); 
 	}
 	
 	action start_tag {
@@ -347,8 +353,7 @@ void gpunct(size_t curline, char * param, size_t len)
 	o_tag = ( (any)* :> cntrl ) %end_otag ;
 	
 	# The main parser.
-	block =(('N' gindex)%line_number .' '*)?( ( 'G'|'M' )  @call_gblock |  'O' o_tag | (extend-ascii)*
-	| ('F' gindex )%command_index | ('T' gindex) | 'S' gindex 
+	block =(('N' gindex)%line_number .' '*)?(  [GMFTS]  @call_gblock |  'O' o_tag | (extend-ascii)*
 	| ';' comment  | ('(' (any)* :>> ')')%end_comment )>start_tag;
 	
 	main := space*(block (l_com)? '\n'? | ('' '\n')? ) %finish_ok;	
@@ -398,6 +403,7 @@ int format_execute( struct format *fsm, char *data, int len, int isEof )
 	fsm->pe = data+len;
 	fsm->eof = isEof ? fsm->pe : 0;
 	start_tag = data;
+	has_return = 0;
 	printf("format_execute[892]: len:%d  done:%d line:%d \n",len,fsm->done,fsm->curline);
 	if(len == 0)
 		return(0);
@@ -408,6 +414,8 @@ int format_execute( struct format *fsm, char *data, int len, int isEof )
 			printf("[898] FAIL :finish code:%d  %-10s \n", format_finish( fsm ) ,data);
 			assert(format_finish( fsm ) >= 1) ;
 		}
+		
+	assert(has_return == 1);
 
 	return (format_finish( fsm ));
 }
