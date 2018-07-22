@@ -37,6 +37,7 @@ extern void b_o_command (size_t curline, char * param, size_t len); // O command
 extern void b_startCommand(size_t curline, char * param, size_t len);
 
 extern void h_add_lineNumber(char* param, size_t len);
+extern void h_comment(char* data, size_t len);
 
 extern void b_endtag();
 

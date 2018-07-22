@@ -61,6 +61,10 @@ void b_gcomment (size_t curline, char * param, size_t len)
 //    printf("_h_Comment: %s",sgcode.comment);
 }
 
+void h_comment(char* data, size_t len){
+	memcpy(sgcode.comment, data, (len<79)?len:79);
+}
+
 void b_g_command (size_t curline, char * param, size_t len)
 {
 //    char buf;

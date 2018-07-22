@@ -305,11 +305,14 @@ void gpunct(size_t curline, char * param, size_t len)
 	}
 	
 	action f_comment{
-		printf("f_comment\n");
+		start_tag = fsm->p;
+		printf("f_comment:%c\n",fc);
 	}
 	
 	action fend_comment{
-		printf("fend_comment\n");
+//		(*prs[eXparam])(fsm->curline ,start_tag,fsm->p - start_tag);
+		h_comment(start_tag, fsm->p - start_tag);
+		printf("fend_comment:%i\n",fc);
 	}
 	
 	
