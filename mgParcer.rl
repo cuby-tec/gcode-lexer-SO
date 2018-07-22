@@ -361,10 +361,10 @@ void gpunct(size_t curline, char * param, size_t len)
 	o_tag = ( (any)* :> cntrl ) %end_otag ;
 	
 	# The main parser.
-	block =(('N' gindex)>start_line_number%line_number .' '*)?(  [GMFTS]  @call_gblock |  'O' o_tag | (extend-ascii)*
+	block =(('N' gindex)>start_line_number%line_number .' '*)?(  [GMFTS]  @call_gblock |  'O' o_tag 
 	| ';' comment  | ('(' (any)* :>> ')')%end_comment )>start_tag;
 	
-	main := space*(block (l_com)? '\n'? | ('' '\n')? ) %finish_ok;	
+	main := (space* | (extend-ascii)*)  (block (l_com)? '\n'? | ('' '\n')? ) %finish_ok;	
 	
 	
 	
