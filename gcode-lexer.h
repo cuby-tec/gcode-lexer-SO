@@ -19,6 +19,8 @@ int setBuffer(char* buf, size_t len);
 
 struct sGcode* getGcode();
 
+void setGcode(struct sGcode* mdst);
+
 char* getErrorComment();
 
 

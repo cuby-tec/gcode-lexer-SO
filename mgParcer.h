@@ -6,26 +6,22 @@
 #ifndef MGPARCER
 #define MGPARCER
 
-#ifdef __cplusplus
-   extern "C" {
-#endif
+//#ifdef __cplusplus
+//   extern "C" {
+//#endif
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stddef.h>
 #include <stdbool.h>
-#include <assert.h>
 
-//#include "ghelper.h"
+#include "ghelper.h"
 
-#define FLOG_no
-#define SCANNER
+//#define FLOG_no
+//#define SCANNER
 
 
 // ------------- vars
-extern FILE *flog;
+//extern FILE *flog;
 
 
 #ifdef SCANNER
@@ -55,9 +51,9 @@ extern void init();
 
 extern int finish();
 
-#ifdef __cplusplus
-   }
-#endif
+//#ifdef __cplusplus
+//   }
+//#endif
 
 #endif
 

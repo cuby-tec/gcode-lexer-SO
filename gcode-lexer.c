@@ -20,20 +20,19 @@ int setBuffer(char* buf, size_t len)
 	return result;
 }
 
+void setGcode(struct sGcode* mdst)
+{
+	dst = mdst;
+}
+
 struct sGcode* getGcode()
 {
 	struct sGcode* result = 0;
-
-
-
 	return result;
 }
 
 char* getErrorComment()
 {
 	char* result = "";
-
-
-
 	return result;
 }

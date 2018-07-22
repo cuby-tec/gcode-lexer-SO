@@ -4,6 +4,8 @@
 
 //--------------------- vars
 
+struct sGcode* dst;
+
 struct sGcode sgcode;
 struct sGparam lineNumber = {0,{0}};
 //----------------------- function
@@ -16,7 +18,7 @@ struct sGcode* getSgcode()
 
 void ghelper_setParam(struct sGparam *pr, char * param, size_t len)
 {
-//    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
+//    struct sGparam *pr =  &dst->param[dst->param_number];
     pr->group = param[0];
     strncpy(pr->value,param+1,(len<10)?len-1:9);
     pr->value[(len<10)?len-1:9] = '\0';
@@ -30,17 +32,17 @@ void clear_sgcode()
 {
     struct sGparam* param;
 
-    memset(sgcode.comment,0,sizeof(sgcode.comment));
-    sgcode.group = ' ';
-    sgcode.line = 0;
-    sgcode.param_number = 0;
+    memset(dst->comment,0,sizeof(dst->comment));
+    dst->group = ' ';
+    dst->line = 0;
+    dst->param_number = 0;
 
-    //sgcode.value = 0;
-    memset(sgcode.value,0,sizeof(sgcode.value));
+    //dst->value = 0;
+    memset(dst->value,0,sizeof(dst->value));
 
-    for(int i=0;i<sizeof(sgcode.param);i++)
+    for(int i=0;i<sizeof(dst->param);i++)
     {
-        param = &sgcode.param[i];
+        param = &dst->param[i];
         param->group = ' ';
         //param->value
         memset(param->value,0,sizeof(param->value));
@@ -51,43 +53,43 @@ void clear_sgcode()
 // It's an End of build command.
 void b_command (size_t curline, char * param, size_t len)
 {
-    sgcode.line = curline;
+    dst->line = curline;
 }
 
 void b_gcomment (size_t curline, char * param, size_t len)
 {
-//sgcode.comment
-    memcpy(sgcode.comment, param, (len<79)?len:79);
-//    printf("_h_Comment: %s",sgcode.comment);
+//dst->comment
+    memcpy(dst->comment, param, (len<79)?len:79);
+//    printf("_h_Comment: %s",dst->comment);
 }
 
 void h_comment(char* data, size_t len){
-	memcpy(sgcode.comment, data, (len<79)?len:79);
+	memcpy(dst->comment, data, (len<79)?len:79);
 }
 
 void b_g_command (size_t curline, char * param, size_t len)
 {
 //    char buf;
 //     'G':
-        sgcode.group = param[0];
-        strncpy(sgcode.value,&param[1],(len<10)?len-1:9);
-        sgcode.value[len-1] = '\0';
+        dst->group = param[0];
+        strncpy(dst->value,&param[1],(len<10)?len-1:9);
+        dst->value[len-1] = '\0';
 
 }
 
 void b_x_coordinate(size_t curline, char * param, size_t len)
 {
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
+    struct sGparam *pr =  &dst->param[dst->param_number];
     ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
+    dst->param_number++;
 }
 
 //void b_y_coordinate(size_t curline, char * param, size_t len)
 void b_o_command (size_t curline, char * param, size_t len) // O command
 {
-    struct sGparam *pr =  &sgcode.param[sgcode.param_number];
+    struct sGparam *pr =  &dst->param[dst->param_number];
     ghelper_setParam(pr,param,len);
-    sgcode.param_number++;
+    dst->param_number++;
 }
 
 
@@ -96,12 +98,12 @@ void
 b_startCommand(size_t curline, char * param, size_t len)
 {
 	memset(&sgcode,0,sizeof(struct sGcode));
-	sgcode.group = *param;
+	dst->group = *param;
 	if(lineNumber.group>0)
 	{
-		sgcode.line =   atoi(lineNumber.value);
+		dst->line =   atoi(lineNumber.value);
 	}else{
-		sgcode.line = curline;
+		dst->line = curline;
 	}
 }
 
@@ -116,16 +118,16 @@ h_add_lineNumber(char* param, size_t len)
 void
 b_endtag()
 {
-	printf("=================\n");
-	printf("_h_report: line number:%i  \tgroup:%c \tindex:%s \tcomment:%s \n",sgcode.line,sgcode.group,sgcode.value , sgcode.comment);
-	for(int i=0;i<sgcode.param_number;i++)
-	{
-		struct sGparam *param = &sgcode.param[i];
-		printf("\t_h_param: group:%c \tvalue:%s\n",param->group,param->value);
-	}
-
-	printf("=================\n");
-
+//	printf("=================\n");
+//	printf("_h_report: line number:%i  \tgroup:%c \tindex:%s \tcomment:%s \n",dst->line,dst->group,dst->value , dst->comment);
+//	for(int i=0;i<dst->param_number;i++)
+//	{
+//		struct sGparam *param = &dst->param[i];
+//		printf("\t_h_param: group:%c \tvalue:%s\n",param->group,param->value);
+//	}
+//
+//	printf("=================\n");
+//
 	lineNumber.group = 0;
 
 }

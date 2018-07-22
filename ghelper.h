@@ -1,17 +1,18 @@
+
 #ifndef GHELPER_H
 #define GHELPER_H
 
 
 
 
-#ifdef __cplusplus
-   extern "C" {
-#endif
+//#ifdef __cplusplus
+//   extern "C" {
+//#endif
 //--------------------defs
 #define SCANNER
 
 #include "sgcode.h"
-
+//#include "ghelper.h"
 
 //#include <stdio.h>
 #include <string.h>
@@ -22,9 +23,11 @@
 
 extern struct sGcode sgcode;
 
+extern struct sGcode* dst;
+
 //--------------- function
 
-#ifdef SCANNER
+//#ifdef SCANNER
 extern void clear_sgcode();
 
 extern struct sGcode* getSgcode();
@@ -42,10 +45,10 @@ extern void h_comment(char* data, size_t len);
 extern void b_endtag();
 
 //extern void b_punct(size_t curline, char* param, size_t len);
-#endif
-#ifdef __cplusplus
-   }
-#endif
+//#endif
+//#ifdef __cplusplus
+//   }
+//#endif
 
 
 #endif // GHELPER_H
