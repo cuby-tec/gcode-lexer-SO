@@ -233,7 +233,7 @@ void gpunct(size_t curline, char * param, size_t len)
 //		fwrite("End\n",1,4,stdout);
 		has_return = 1;
 		b_endtag();
-		printf("\n action finish_ok.\n");
+//		printf("\n action finish_ok.\n");
 	}
 	
 	action dgt      {
@@ -249,7 +249,7 @@ void gpunct(size_t curline, char * param, size_t len)
 
 	action return { 
 		has_return = 1;
-		printf("RETURN\n"); 
+//		printf("RETURN\n"); 
 		fret; 
 	}
 	
@@ -261,26 +261,30 @@ void gpunct(size_t curline, char * param, size_t len)
 	
 	action start_param {
 		gts = buffer_index;
-		printf("start param: %c\n",fc); 
+//		printf("start param: %c\n",fc); 
 	}
 	
 	action end_param {
-		(*prs[eXparam])(fsm->curline ,&gBuffer[gts],buffer_index - gts);
-		fwrite( &gBuffer[gts], 1, buffer_index - gts, stdout );
-		printf("\n\tend_param: %i\n",fc); 
+//		(*prs[eXparam])(fsm->curline ,&gBuffer[gts],buffer_index - gts);
+		b_x_coordinate (fsm->curline ,&gBuffer[gts],buffer_index - gts);
+//		fwrite( &gBuffer[gts], 1, buffer_index - gts, stdout );
+//		printf("\n\tend_param: %i\n",fc); 
 	}
 	
 	action start_tag {
 		resetBuffer();
 		append(fc);
-		//printf("start_tag: %c\n",fc);
-		(*prs[eStartCommand])(fsm->curline ,fsm->p,buffer_index);
+		//printf("start_tag: %c\n",fc); b_o_command
+//		(*prs[eStartCommand])(fsm->curline ,fsm->p,1);
+		b_startCommand(fsm->curline ,fsm->p,1);
+		start_tag = fsm->p;
 	}
 	
 	action command_index{
-//		(*prs[eGcommand])(fsm->curline ,gBuffer,buffer_index-gts);
-		fwrite( gBuffer, 1, buffer_index, stdout );
-		printf("\ncommand_index: %c\n",fc);
+//		(*prs[eGcommand])(fsm->curline ,start_tag,fsm->p - start_tag);
+		b_g_command (fsm->curline ,start_tag,fsm->p - start_tag);
+//		fwrite( start_tag, 1, fsm->p - start_tag, stdout );
+//		printf("\ncommand_index: %i\n",fc);
 	}
 	
 	action end_comment{
@@ -293,32 +297,38 @@ void gpunct(size_t curline, char * param, size_t len)
 	action end_otag{
 		(*prs[eOcommand])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
 		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
-		printf("\nend_otag: %c\n",fc);
+//		printf("\nend_otag: %c\n",fc);
 	}
 	
 	action end_command{
 //		/eCommand  start_tag, 1, fsm->p - start_tag, stdout
-		(*prs[eCommand])(fsm->curline ,start_tag,fsm->p - start_tag);
+//		(*prs[eCommand])(fsm->curline ,start_tag,fsm->p - start_tag);
+		b_command(fsm->curline ,start_tag,fsm->p - start_tag);
 		
 	}
 	
 	action line_number{
 //		void h_add_lineNumber(char* param, size_t len)
-		h_add_lineNumber(fsm->buf, fsm->p - fsm->buf);
+		h_add_lineNumber(start_tag, fsm->p - start_tag);
 //		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
 //		printf("\tline_number: %i\n",fc);
 		start_tag = fsm->p;
 	}
+	action start_line_number{
+		start_tag = fsm->p;
+//		printf("\tstart_line_number: %i\n",fc);
+	}
+	
 	
 	action f_comment{
 		start_tag = fsm->p;
-		printf("f_comment:%c\n",fc);
+//		printf("f_comment:%c\n",fc);
 	}
 	
 	action fend_comment{
 //		(*prs[eXparam])(fsm->curline ,start_tag,fsm->p - start_tag);
 		h_comment(start_tag, fsm->p - start_tag);
-		printf("fend_comment:%i\n",fc);
+//		printf("fend_comment:%i\n",fc);
 	}
 	
 	
@@ -351,7 +361,7 @@ void gpunct(size_t curline, char * param, size_t len)
 	o_tag = ( (any)* :> cntrl ) %end_otag ;
 	
 	# The main parser.
-	block =(('N' gindex)%line_number .' '*)?(  [GMFTS]  @call_gblock |  'O' o_tag | (extend-ascii)*
+	block =(('N' gindex)>start_line_number%line_number .' '*)?(  [GMFTS]  @call_gblock |  'O' o_tag | (extend-ascii)*
 	| ';' comment  | ('(' (any)* :>> ')')%end_comment )>start_tag;
 	
 	main := space*(block (l_com)? '\n'? | ('' '\n')? ) %finish_ok;	

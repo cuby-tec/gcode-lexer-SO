@@ -78,9 +78,6 @@ void b_g_command (size_t curline, char * param, size_t len)
 void b_x_coordinate(size_t curline, char * param, size_t len)
 {
     struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-//    pr->group = param[0];
-//    strncpy(pr->value,param+1,(len<10)?len-1:9);
-//    pr->value[(len<10)?len-1:9] = '\0';
     ghelper_setParam(pr,param,len);
     sgcode.param_number++;
 }
@@ -89,9 +86,6 @@ void b_x_coordinate(size_t curline, char * param, size_t len)
 void b_o_command (size_t curline, char * param, size_t len) // O command
 {
     struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-//    pr->group = param[0];
-//    strncpy(pr->value,param+1,(len<10)?len-1:9);
-//    pr->value[(len<10)?len-1:9] = '\0';
     ghelper_setParam(pr,param,len);
     sgcode.param_number++;
 }
@@ -103,40 +97,19 @@ b_startCommand(size_t curline, char * param, size_t len)
 {
 	memset(&sgcode,0,sizeof(struct sGcode));
 	sgcode.group = *param;
-//	fwrite( &sgcode.group, 1, len, stdout );
-
-//	printf("_h_startc linenumber.group:%c \n",lineNumber.group);
 	if(lineNumber.group>0)
 	{
-		//add param
-//		struct sGparam *dst = &sgcode.param[sgcode.param_number];
-//		dst->group = lineNumber.group;
-//		strcpy(dst->value,lineNumber.value);
-//		sgcode.param_number++;
 		sgcode.line =   atoi(lineNumber.value);
 	}else{
 		sgcode.line = curline;
 	}
-
-//	printf("\n\t_h_Start command: curline:%li \n ",curline);
-
-
 }
 
 void
 h_add_lineNumber(char* param, size_t len)
 {
-//	 struct sGparam *pr =  &sgcode.param[sgcode.param_number];
-//	 ghelper_setParam(pr,param, len);
-//	 sgcode.param_number++;
-
-//	ghelper_setParam(&lineNumber,param,len);
-
-
 	lineNumber.group = param[0];
 	strncpy(lineNumber.value,param+1,(len<10)?len-1:9);
-
-//	printf("\t_h_Line number: group:%c  value:%s \n ", lineNumber.group, lineNumber.value);
 }
 
 
@@ -144,14 +117,14 @@ void
 b_endtag()
 {
 	printf("=================\n");
-	printf("_h_report: line number:%i  \tgroup:%c  \tcomment:%s \n",sgcode.line,sgcode.group , sgcode.comment);
+	printf("_h_report: line number:%i  \tgroup:%c \tindex:%s \tcomment:%s \n",sgcode.line,sgcode.group,sgcode.value , sgcode.comment);
 	for(int i=0;i<sgcode.param_number;i++)
 	{
 		struct sGparam *param = &sgcode.param[i];
 		printf("\t_h_param: group:%c \tvalue:%s\n",param->group,param->value);
 	}
 
-	printf("=================");
+	printf("=================\n");
 
 	lineNumber.group = 0;
 
