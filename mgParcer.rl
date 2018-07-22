@@ -334,7 +334,7 @@ void gpunct(size_t curline, char * param, size_t len)
 	l_com = (( '('(any)* :>> ')') ) ;
 	
 	#f_comment = ( (print)+ );
-	malpha = [A-Za-z*];
+	malpha = [A-Z*];
 	
 	#param_data = ((malpha) ([+\-]? digit+)? ('.' digit+)? )%end_param ;
 	param_data = ((malpha) ([+\-]? digit+)? ('.' digit+)? ) ;
@@ -342,10 +342,8 @@ void gpunct(size_t curline, char * param, size_t len)
 	#param = ((param_data) | ( l_com  ) )>start_param $dgt %end_param ;
 	param = ((malpha graph*) | ( l_com  ) )>start_param $dgt %end_param ;
 	
-	f_comment = (';' (print)* )?;
-	
 	# A parser for name strings.
-	gname := (( gindex)%command_index space+ ((( (param) space+ )*)? )  ((';' print*)>f_comment %fend_comment ) '\n') @return;
+	gname := (( gindex)%command_index space* (param space*)* ((';' print*)>f_comment %fend_comment )* '\n') @return;
 
 	#Comment content
 	comment = ( (print)+  ) %end_comment ;
