@@ -6,14 +6,13 @@
 
 struct sGcode* dst;
 
-struct sGcode sgcode;
 struct sGparam lineNumber = {0,{0}};
 //----------------------- function
 
 
 struct sGcode* getSgcode()
 {
-    return &sgcode;
+    return dst;
 }
 
 void ghelper_setParam(struct sGparam *pr, char * param, size_t len)
@@ -97,7 +96,7 @@ void b_o_command (size_t curline, char * param, size_t len) // O command
 void
 b_startCommand(size_t curline, char * param, size_t len)
 {
-	memset(&sgcode,0,sizeof(struct sGcode));
+	memset(dst,0,sizeof(struct sGcode));
 	dst->group = *param;
 	if(lineNumber.group>0)
 	{

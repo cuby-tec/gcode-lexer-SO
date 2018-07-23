@@ -5,38 +5,15 @@
  */
 
 #include "mgParcer.h"
-//#include <stdio.h>
-//#include <string.h>
-//#include <stdlib.h>
-//#include <string.h>
-//#include <stddef.h>
+//#include "ghelper.h"
 
 
-//#define BUFLEN 512
+//#define FLOG
 
-typedef void (*gfunction)(size_t, char *, size_t );  // Declare typedef
-
-#define INPUT_BUFSIZE 1024
-
-#define FLOG
-
-
-
-enum prsCmd{
-	eCommand, eComment, eGcommand, eXparam, eOcommand
- 	,eStartCommand
-	
-};
-
-
-typedef void (*WriteFunc)( char *data, int len );
-
-struct format
+struct m_format
 {
 	char* buf;	//char buf[BUFLEN+1];
 	int buflen;
-	WriteFunc write;
-
 	int flags;
 	int width;
 	int prec;
@@ -54,44 +31,17 @@ struct format
 	int space;
 	int eofile;
 	int lenfile;
-	uint state;
+	int state;//uint
 	int top;
 	int stack[100];
 };
 
-//#define curline	fsm->curline
 
 //------------------- vars
 
 static const int format_start = 11;
 static const int format_first_final = 11;
 static const int format_error = 0;
-
-char buf[INPUT_BUFSIZE];
-
-
-//	int have = 0, curline = 1;
-//	char *ts, *te = 0;
-//	int done = 0;
-
-
-	FILE *fp;
-	FILE *flog;
-//static void (* parser_out)(size_t number, char * param, size_t len);
-
-static gfunction parser_out;
-
- void command (size_t curline, char * param, size_t len);
- void gcomment (size_t curline, char * param, size_t len);
- void g_command (size_t curline, char * param, size_t len);
- void x_coordinate(size_t curline, char * param, size_t len);
- void o_command (size_t curline, char * param, size_t len);
-void start_command(size_t curline, char * param, size_t len);//eStartCommand
- //fprintf(flog, "symbol(%i): %c\n", fsm->curline, fsm->ts[0] );
-// void gpunct(size_t curline, char * param, size_t len);
-
-gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate, &o_command
-		, &start_command };
 
 
 #define gBUFFER_SIZE	100 
@@ -101,7 +51,9 @@ gfunction prs[] = {&command,&gcomment,&g_command,&x_coordinate, &o_command
  size_t buffer_index = 0;
  size_t param_index;
  size_t gts;
-
+ char* start_tag;
+ int has_return;
+ 
 void append(char ch)
 {
 	gBuffer[buffer_index++] = ch;
@@ -117,267 +69,211 @@ void resetBuffer()
 
 
 
-void start_command(size_t curline, char * param, size_t len)
-{
-	//size_t curline, char * param, size_t len
-	b_startCommand(curline, param, len);
-//	printf("Start command.\n");
-	
-}
-
-// g Command
- void command (size_t curline, char * param, size_t len){
-#ifdef FLOG
-		fprintf(flog, "Command(%lu): ", curline );
-		fwrite( param, 1, len, flog );  
-		fprintf(flog,"\n");
-#endif
-#ifdef SCANNER
-		b_command(curline,param,len);
-#endif
-}
-
-// g comment
- void gcomment (size_t curline, char * param, size_t len){
-#ifdef FLOG
-		fprintf(flog, "gcomment(%lu): ", curline );
-		fwrite( param, 1, len, flog );  
-		fprintf(flog,"\n");
-#endif
-#ifdef SCANNER		
-		b_gcomment(curline,param,len);
-#endif
-}
-
-// g GXX.X digit 		=command=	command GXX.X
- void g_command (size_t curline, char * param, size_t len){
-#ifdef FLOG	 
-		fprintf(flog, "command line(%lu): ", curline );
-		fwrite( param, 1, len, flog );
-		fprintf(flog,"\n");
-#endif
-#ifdef SCANNER		
-		b_g_command (curline, param, len);
-#endif
-}
-
-// g X coordinate
- void x_coordinate(size_t curline, char * param, size_t len)
-{
-#ifdef FLOG
-	 fprintf(flog, "\t parameter line(%lu): ", curline );
-		fwrite( param, 1, len, flog );
-		fprintf(flog,"\n");
-#endif
-#ifdef SCANNER		
-		b_x_coordinate (curline, param, len);
-#endif
-}
-
- // O command
-void o_command (size_t curline, char * param, size_t len){
-#ifdef FLOG
-	 fprintf(flog, "command line(%lu): ", curline );
-		fwrite( param, 1, len, flog );
-		fprintf(flog,"\n");
-#endif
-#ifdef SCANNER		
-		b_o_command (curline, param, len);
-#endif
-
-}
- 
-// g *	digit		Checksum 
-
-/*
-void gpunct(size_t curline, char * param, size_t len)
-{
-#ifdef FLOG
-	fprintf(flog, "symbol(%lu): %c\n", curline, *param );
-#endif
-#ifdef SCANNER
-	b_punct(curline, param, len);
-#endif	
-}
-
-*/
-
-
-// 		punct			Symbols.
-
-
-#line 327 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 199 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 
 
 
-#line 214 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
+#line 77 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
 static const char _gparcer_actions[] = {
 	0, 1, 0, 1, 1, 1, 2, 1, 
 	3, 1, 6, 1, 7, 1, 8, 1, 
-	9, 1, 10, 2, 5, 1, 2, 6, 
-	1, 2, 6, 3, 2, 7, 0, 2, 
-	7, 4, 2, 8, 0, 2, 8, 3, 
-	2, 9, 0, 2, 9, 6, 2, 10, 
-	0, 3, 6, 5, 1
+	9, 1, 10, 1, 11, 1, 12, 1, 
+	13, 2, 1, 3, 2, 1, 5, 2, 
+	1, 6, 2, 1, 13, 2, 5, 1, 
+	2, 6, 3, 2, 6, 13, 2, 7, 
+	4, 2, 8, 3, 2, 8, 13, 2, 
+	9, 0, 2, 10, 0, 2, 11, 7, 
+	2, 14, 3, 2, 14, 13, 3, 1, 
+	6, 3, 3, 1, 6, 5, 3, 1, 
+	6, 13, 3, 1, 14, 3, 3, 1, 
+	14, 13, 3, 6, 5, 1, 3, 6, 
+	14, 3, 3, 6, 14, 13, 3, 8, 
+	5, 1, 3, 11, 7, 4, 4, 1, 
+	6, 14, 3, 4, 1, 6, 14, 13
+	
 };
 
-static const unsigned char _gparcer_key_offsets[] = {
-	0, 0, 1, 4, 5, 10, 14, 16, 
-	18, 21, 23, 25, 29, 31, 35, 37, 
-	40, 42, 47, 56, 57, 68, 84, 86, 
-	100, 102, 115, 118, 120, 124, 137, 142, 
-	142, 143, 146, 154, 163, 165, 166, 169, 
-	175, 180, 183, 186, 192, 197, 197, 197
+static const short _gparcer_key_offsets[] = {
+	0, 0, 1, 2, 4, 6, 18, 27, 
+	30, 32, 43, 47, 49, 53, 55, 58, 
+	60, 72, 81, 82, 91, 104, 118, 128, 
+	133, 146, 159, 163, 176, 190, 204, 206, 
+	217, 237, 253, 253, 255, 256, 260, 265, 
+	266, 268, 270, 282, 282, 291, 301, 302
 };
 
 static const char _gparcer_trans_keys[] = {
-	41, 127, 0, 31, 41, 127, 0, 31, 
-	32, 126, 41, 127, 0, 31, 48, 57, 
-	48, 57, 127, 0, 31, 48, 57, 48, 
-	57, 43, 45, 48, 57, 48, 57, 10, 
-	46, 48, 57, 48, 57, 10, 48, 57, 
-	48, 57, 10, 32, 46, 48, 57, 10, 
-	32, 40, 42, 59, 65, 90, 97, 122, 
-	41, 10, 32, 40, 42, 59, 9, 13, 
-	65, 90, 97, 122, 10, 32, 40, 42, 
-	43, 45, 46, 59, 9, 13, 48, 57, 
-	65, 90, 97, 122, 48, 57, 10, 32, 
-	40, 42, 46, 59, 9, 13, 48, 57, 
-	65, 90, 97, 122, 48, 57, 10, 32, 
+	41, 41, 32, 126, 48, 57, 32, 40, 
+	46, 59, 77, 79, 48, 57, 70, 71, 
+	83, 84, 32, 40, 59, 77, 79, 70, 
+	71, 83, 84, 127, 0, 31, 48, 57, 
+	32, 40, 59, 77, 79, 48, 57, 70, 
+	71, 83, 84, 43, 45, 48, 57, 48, 
+	57, 10, 46, 48, 57, 48, 57, 10, 
+	48, 57, 48, 57, 10, 32, 40, 42, 
+	46, 59, 9, 13, 48, 57, 65, 90, 
+	10, 32, 40, 42, 59, 9, 13, 65, 
+	90, 41, 10, 32, 40, 42, 59, 9, 
+	13, 65, 90, 10, 32, 40, 42, 59, 
+	9, 13, 33, 64, 65, 90, 91, 126, 
+	10, 32, 40, 41, 42, 59, 9, 13, 
+	33, 64, 65, 90, 91, 126, 10, 32, 
+	40, 41, 42, 59, 9, 13, 65, 90, 
+	10, 41, 59, 32, 126, 10, 32, 40, 
+	42, 59, 9, 13, 33, 64, 65, 90, 
+	91, 126, 10, 32, 40, 42, 59, 9, 
+	13, 33, 64, 65, 90, 91, 126, 10, 
+	59, 32, 126, 10, 32, 40, 42, 59, 
+	9, 13, 33, 64, 65, 90, 91, 126, 
+	10, 32, 40, 41, 42, 59, 9, 13, 
+	33, 64, 65, 90, 91, 126, 10, 32, 
+	40, 41, 42, 59, 9, 13, 33, 64, 
+	65, 90, 91, 126, 48, 57, 10, 32, 
 	40, 42, 59, 9, 13, 48, 57, 65, 
-	90, 97, 122, 127, 0, 31, 48, 57, 
-	10, 32, 48, 57, 10, 40, 59, 70, 
-	71, 77, 79, 0, 82, 83, 84, 85, 
-	127, 10, 40, 59, 0, 127, 10, 10, 
-	40, 59, 10, 40, 59, 127, 0, 31, 
-	32, 126, 10, 40, 41, 59, 127, 0, 
-	31, 32, 126, 10, 41, 41, 127, 0, 
-	31, 10, 40, 46, 59, 48, 57, 10, 
-	40, 59, 48, 57, 10, 40, 59, 10, 
-	40, 59, 10, 40, 46, 59, 48, 57, 
-	10, 40, 59, 48, 57, 10, 32, 40, 
-	42, 59, 9, 13, 65, 90, 97, 122, 
-	0
+	90, 32, 40, 59, 77, 78, 79, 0, 
+	8, 9, 13, 14, 69, 70, 71, 72, 
+	82, 83, 84, 85, 127, 10, 40, 59, 
+	77, 78, 79, 0, 69, 70, 71, 72, 
+	82, 83, 84, 85, 127, 10, 40, 10, 
+	10, 40, 32, 126, 10, 40, 41, 32, 
+	126, 41, 10, 40, 10, 40, 32, 40, 
+	59, 77, 78, 79, 9, 13, 70, 71, 
+	83, 84, 10, 32, 40, 42, 59, 9, 
+	13, 65, 90, 10, 32, 40, 41, 42, 
+	59, 9, 13, 65, 90, 41, 0
 };
 
 static const char _gparcer_single_lengths[] = {
-	0, 1, 1, 1, 1, 2, 0, 0, 
-	1, 0, 0, 2, 0, 2, 0, 1, 
-	0, 3, 5, 1, 5, 8, 0, 6, 
-	0, 5, 1, 0, 2, 7, 3, 0, 
-	1, 3, 4, 5, 2, 1, 1, 4, 
-	3, 3, 3, 4, 3, 0, 0, 5
+	0, 1, 1, 0, 0, 6, 5, 1, 
+	0, 5, 2, 0, 2, 0, 1, 0, 
+	6, 5, 1, 5, 5, 6, 6, 3, 
+	5, 5, 2, 5, 6, 6, 0, 5, 
+	6, 6, 0, 2, 1, 2, 3, 1, 
+	2, 2, 6, 0, 5, 6, 1, 0
 };
 
 static const char _gparcer_range_lengths[] = {
-	0, 0, 1, 0, 2, 1, 1, 1, 
-	1, 1, 1, 1, 1, 1, 1, 1, 
-	1, 1, 2, 0, 3, 4, 1, 4, 
-	1, 4, 1, 1, 1, 3, 1, 0, 
-	0, 0, 2, 2, 0, 0, 1, 1, 
-	1, 0, 0, 1, 1, 0, 0, 3
+	0, 0, 0, 1, 1, 3, 2, 1, 
+	1, 3, 1, 1, 1, 1, 1, 1, 
+	3, 2, 0, 2, 4, 4, 2, 1, 
+	4, 4, 1, 4, 4, 4, 1, 3, 
+	7, 5, 0, 0, 0, 1, 1, 0, 
+	0, 0, 3, 0, 2, 2, 0, 0
 };
 
-static const unsigned char _gparcer_index_offsets[] = {
-	0, 0, 2, 5, 7, 11, 15, 17, 
-	19, 22, 24, 26, 30, 32, 36, 38, 
-	41, 43, 48, 56, 58, 67, 80, 82, 
-	93, 95, 105, 108, 110, 114, 125, 130, 
-	131, 133, 137, 144, 152, 155, 157, 160, 
-	166, 171, 175, 179, 185, 190, 191, 192
+static const short _gparcer_index_offsets[] = {
+	0, 0, 2, 4, 6, 8, 18, 26, 
+	29, 31, 40, 44, 46, 50, 52, 55, 
+	57, 67, 75, 77, 85, 95, 106, 115, 
+	120, 130, 140, 144, 154, 165, 176, 178, 
+	187, 201, 213, 214, 217, 219, 223, 228, 
+	230, 233, 236, 246, 247, 255, 264, 266
 };
 
 static const char _gparcer_indicies[] = {
-	1, 0, 1, 1, 2, 4, 3, 1, 
-	1, 5, 2, 8, 7, 7, 6, 9, 
-	10, 11, 10, 13, 13, 12, 14, 10, 
-	15, 10, 16, 16, 17, 10, 17, 10, 
-	18, 19, 17, 10, 20, 10, 18, 20, 
-	10, 21, 10, 22, 23, 24, 21, 10, 
-	25, 26, 27, 28, 29, 28, 28, 10, 
-	31, 30, 33, 32, 27, 28, 29, 32, 
-	28, 28, 10, 35, 34, 36, 37, 38, 
-	38, 39, 41, 34, 40, 37, 37, 10, 
-	40, 10, 35, 34, 36, 37, 39, 41, 
-	34, 40, 37, 37, 10, 42, 10, 35, 
-	34, 36, 37, 41, 34, 42, 37, 37, 
-	10, 31, 31, 43, 44, 10, 22, 23, 
-	44, 10, 46, 47, 48, 49, 50, 50, 
-	51, 10, 52, 10, 45, 54, 0, 2, 
-	10, 53, 10, 54, 10, 55, 56, 57, 
-	10, 58, 59, 60, 1, 1, 5, 2, 
-	61, 59, 63, 59, 7, 7, 62, 6, 
-	64, 1, 0, 1, 0, 1, 1, 2, 
-	65, 66, 67, 68, 9, 10, 65, 66, 
-	68, 11, 10, 54, 0, 2, 10, 69, 
-	70, 71, 10, 54, 0, 72, 2, 14, 
-	10, 54, 0, 2, 15, 10, 10, 10, 
-	33, 32, 27, 28, 29, 32, 28, 28, 
-	10, 0
+	1, 0, 3, 2, 4, 5, 6, 5, 
+	7, 8, 9, 10, 11, 12, 6, 11, 
+	11, 5, 13, 14, 15, 16, 17, 16, 
+	16, 5, 19, 19, 18, 20, 5, 7, 
+	8, 10, 11, 12, 20, 11, 11, 5, 
+	21, 21, 22, 5, 22, 5, 23, 24, 
+	22, 5, 25, 5, 23, 25, 5, 26, 
+	5, 28, 27, 29, 30, 31, 32, 27, 
+	26, 30, 5, 34, 33, 35, 36, 37, 
+	33, 36, 5, 39, 38, 41, 40, 42, 
+	43, 44, 40, 43, 5, 41, 40, 46, 
+	47, 48, 40, 45, 47, 45, 5, 50, 
+	49, 46, 45, 46, 52, 49, 51, 46, 
+	51, 38, 54, 53, 55, 39, 56, 57, 
+	53, 56, 38, 58, 60, 61, 59, 38, 
+	62, 63, 65, 66, 67, 40, 64, 66, 
+	64, 5, 68, 69, 70, 71, 72, 33, 
+	64, 71, 64, 5, 73, 72, 64, 5, 
+	62, 63, 75, 76, 77, 40, 74, 76, 
+	74, 5, 78, 79, 75, 74, 75, 81, 
+	49, 80, 75, 80, 38, 82, 83, 84, 
+	60, 85, 61, 53, 59, 85, 59, 38, 
+	86, 5, 28, 27, 29, 30, 32, 27, 
+	86, 30, 5, 88, 14, 15, 16, 89, 
+	17, 5, 88, 5, 16, 5, 16, 5, 
+	87, 90, 14, 15, 16, 89, 17, 5, 
+	16, 5, 16, 5, 87, 5, 91, 92, 
+	5, 90, 5, 91, 93, 4, 5, 94, 
+	93, 4, 95, 2, 3, 2, 90, 2, 
+	5, 96, 97, 5, 88, 14, 15, 16, 
+	89, 17, 88, 16, 16, 5, 5, 34, 
+	33, 35, 36, 37, 33, 36, 5, 54, 
+	53, 55, 39, 56, 57, 53, 56, 38, 
+	39, 38, 5, 0
 };
 
 static const char _gparcer_trans_targs[] = {
-	1, 32, 2, 3, 33, 34, 5, 36, 
-	38, 39, 0, 40, 8, 42, 43, 44, 
-	12, 13, 45, 14, 15, 17, 46, 18, 
-	27, 46, 18, 19, 21, 26, 19, 20, 
-	20, 47, 20, 47, 19, 21, 22, 24, 
-	23, 26, 25, 26, 28, 30, 31, 3, 
-	4, 6, 41, 8, 9, 30, 31, 31, 
-	1, 2, 32, 35, 34, 36, 35, 34, 
-	37, 31, 1, 7, 2, 31, 1, 2, 
-	10
+	1, 35, 2, 36, 37, 0, 5, 6, 
+	1, 8, 3, 40, 7, 6, 1, 3, 
+	40, 7, 7, 41, 9, 11, 12, 43, 
+	13, 14, 16, 17, 44, 18, 20, 30, 
+	26, 17, 44, 18, 20, 26, 18, 19, 
+	17, 44, 18, 20, 26, 20, 21, 20, 
+	27, 22, 45, 21, 28, 22, 45, 18, 
+	21, 23, 46, 23, 24, 23, 44, 25, 
+	26, 23, 27, 26, 44, 25, 23, 27, 
+	26, 47, 27, 28, 27, 27, 45, 29, 
+	28, 28, 45, 29, 23, 28, 31, 33, 
+	42, 4, 34, 34, 2, 38, 39, 38, 
+	34, 2
 };
 
 static const char _gparcer_trans_actions[] = {
-	0, 9, 0, 0, 9, 0, 0, 9, 
-	9, 3, 0, 3, 0, 0, 3, 3, 
-	0, 0, 7, 0, 0, 3, 37, 13, 
-	5, 7, 0, 19, 19, 19, 3, 22, 
-	0, 7, 9, 25, 49, 49, 3, 3, 
-	3, 49, 3, 3, 3, 11, 11, 11, 
-	11, 11, 31, 11, 11, 0, 0, 15, 
-	15, 15, 43, 15, 15, 43, 0, 9, 
-	0, 13, 13, 5, 13, 17, 17, 17, 
-	5
+	0, 0, 0, 0, 0, 0, 3, 19, 
+	61, 5, 61, 106, 61, 0, 11, 11, 
+	46, 11, 0, 0, 3, 0, 0, 7, 
+	0, 0, 3, 13, 49, 102, 102, 5, 
+	52, 0, 7, 37, 37, 23, 3, 3, 
+	9, 40, 90, 90, 43, 3, 74, 74, 
+	78, 31, 70, 3, 78, 3, 25, 28, 
+	28, 34, 82, 3, 3, 86, 94, 9, 
+	0, 90, 90, 98, 64, 0, 37, 37, 
+	67, 64, 3, 74, 74, 115, 110, 31, 
+	3, 115, 82, 3, 28, 28, 3, 0, 
+	0, 21, 0, 15, 15, 15, 15, 0, 
+	17, 17
 };
 
 static const char _gparcer_eof_actions[] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 0, 0, 28, 1, 1, 
-	1, 40, 40, 40, 1, 1, 1, 34, 
-	34, 1, 46, 1, 1, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	1, 1, 1, 55, 1, 55, 55, 1, 
+	1, 58, 1, 0, 0, 0, 0, 0
 };
 
-static const int gparcer_start = 29;
-static const int gparcer_first_final = 29;
+static const int gparcer_start = 32;
+static const int gparcer_first_final = 32;
 static const int gparcer_error = 0;
 
-static const int gparcer_en_date = 11;
-static const int gparcer_en_gname = 16;
-static const int gparcer_en_main = 29;
+static const int gparcer_en_date = 10;
+static const int gparcer_en_gname = 15;
+static const int gparcer_en_main = 32;
 
 
-#line 330 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 202 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 
 
-struct format fsm;
+struct m_format fsm;
 
-
-
-
-int format_finish( struct format *fsmp )
+int format_finish( struct m_format *fsmp )
 {
+	int result;
+
 	if ( fsmp->cs == format_error )
-		return -1;
-	if ( fsmp->cs >= format_first_final )
-		return 1;
-	return 0;
+		result = -1;
+	if ( fsmp->cs >= format_first_final && has_return)
+		result = 1;
+	return result;
 }
 
-void format_init( struct format *fsm )
+void format_init( struct m_format *fsm )
 {
 	buffer_index = 0;
 	fsm->buflen = 0;
@@ -387,30 +283,30 @@ void format_init( struct format *fsm )
 	fsm->curline = 1;
 	fsm->state = 0;
 	
-#line 391 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
+#line 287 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
 	{
 	( fsm->cs) = gparcer_start;
 	( fsm->top) = 0;
 	}
 
-#line 356 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 227 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 }
+
 static int strnum = 0;
-void format_execute( struct format *fsm, char *data, int len, int isEof )
+
+int format_execute( struct m_format *fsm, char *data, int len, int isEof )
 {
-//	const char *p = data;
-//	const char *pe = data + len;
-//	const char *eof = isEof ? pe : 0;
 	fsm->curline = ++strnum;
 	fsm->buf = data;
 	fsm->p = data;
 	fsm->pe = data+len;
 	fsm->eof = isEof ? fsm->pe : 0;
-	printf("format_execute[892]: len:%d  done:%d line:%d \n",len,fsm->done,fsm->curline);
+	start_tag = data;
+	has_return = 0;
 	if(len == 0)
-		return;
+		return(0);
 	
-#line 414 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
+#line 310 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -485,80 +381,96 @@ _match:
 		switch ( *_acts++ )
 		{
 	case 1:
-#line 232 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 93 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
 		append((*( fsm->p)));
-//		printf("DGT: %c\n", fc); 
 	}
 	break;
 	case 2:
-#line 237 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 97 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
 		append((*( fsm->p)));
-//		printf("DEC: .\n"); 
 	}
 	break;
 	case 3:
-#line 243 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
-	{ printf("RETURN\n"); {( fsm->cs) = ( fsm->stack)[--( fsm->top)]; goto _again;} }
+#line 102 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+	{ 
+		has_return = 1;
+		{( fsm->cs) = ( fsm->stack)[--( fsm->top)]; goto _again;} 
+	}
 	break;
 	case 4:
-#line 245 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 107 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
-//		append(fc);
-//		printf("NAME: %c\n",fc);
-		{( fsm->stack)[( fsm->top)++] = ( fsm->cs); ( fsm->cs) = 16; goto _again;} 
+		{( fsm->stack)[( fsm->top)++] = ( fsm->cs); ( fsm->cs) = 15; goto _again;} 
 	}
 	break;
 	case 5:
-#line 251 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 111 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
 		gts = buffer_index;
-		printf("start param: %c\n",(*( fsm->p))); 
 	}
 	break;
 	case 6:
-#line 256 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 115 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
-		(*prs[eXparam])(fsm->curline ,&gBuffer[gts],buffer_index - gts);
-		fwrite( &gBuffer[gts], 1, buffer_index - gts, stdout );
-		printf("\n\tend_param: %c\n",(*( fsm->p))); 
+		b_x_coordinate (fsm->curline ,&gBuffer[gts],buffer_index - gts);
 	}
 	break;
 	case 7:
-#line 262 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 119 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
 		resetBuffer();
 		append((*( fsm->p)));
-		//printf("start_tag: %c\n",fc);
-		(*prs[eStartCommand])(fsm->curline ,fsm->p,buffer_index);
+		b_startCommand(fsm->curline ,fsm->p,1);
+		start_tag = fsm->p;
 	}
 	break;
 	case 8:
-#line 269 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 126 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
-//		(*prs[eGcommand])(fsm->curline ,gBuffer,buffer_index-gts);
-		fwrite( gBuffer, 1, buffer_index, stdout );
-		printf("\ncommand_index: %c\n",(*( fsm->p)));
+		b_g_command (fsm->curline ,start_tag,fsm->p - start_tag);
 	}
 	break;
 	case 9:
-#line 275 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 130 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
-		(*prs[eComment])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
-		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
-		printf("\nend_comment: %c\n",(*( fsm->p)));
+		b_gcomment(fsm->curline ,start_tag,fsm->p - start_tag);
 	}
 	break;
 	case 10:
-#line 281 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 134 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
-		(*prs[eOcommand])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
-		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
-		printf("\nend_otag: %c\n",(*( fsm->p)));
+		b_o_command (fsm->curline ,fsm->buf,fsm->p - fsm->buf);
+//		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
 	}
 	break;
-#line 562 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
+	case 11:
+#line 144 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+	{
+		h_add_lineNumber(start_tag, fsm->p - start_tag);
+		start_tag = fsm->p;
+	}
+	break;
+	case 12:
+#line 148 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+	{
+		start_tag = fsm->p;
+	}
+	break;
+	case 13:
+#line 153 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+	{
+		start_tag = fsm->p;
+	}
+	break;
+	case 14:
+#line 157 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+	{
+		h_comment(start_tag, fsm->p - start_tag);
+	}
+	break;
+#line 474 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
 		}
 	}
 
@@ -575,48 +487,26 @@ _again:
 	while ( __nacts-- > 0 ) {
 		switch ( *__acts++ ) {
 	case 0:
-#line 225 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 88 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
-//		if ( fsm->buflen > 0 )
-//			fsm->write( fsm->buf, fsm->buflen );
-//		fwrite("End\n",1,4,stdout);
-		printf("\n action finish_ok.\n");
-	}
-	break;
-	case 7:
-#line 262 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
-	{
-		resetBuffer();
-		append((*( fsm->p)));
-		//printf("start_tag: %c\n",fc);
-		(*prs[eStartCommand])(fsm->curline ,fsm->p,buffer_index);
-	}
-	break;
-	case 8:
-#line 269 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
-	{
-//		(*prs[eGcommand])(fsm->curline ,gBuffer,buffer_index-gts);
-		fwrite( gBuffer, 1, buffer_index, stdout );
-		printf("\ncommand_index: %c\n",(*( fsm->p)));
+		has_return = 1;
+		b_endtag();
 	}
 	break;
 	case 9:
-#line 275 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 130 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
-		(*prs[eComment])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
-		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
-		printf("\nend_comment: %c\n",(*( fsm->p)));
+		b_gcomment(fsm->curline ,start_tag,fsm->p - start_tag);
 	}
 	break;
 	case 10:
-#line 281 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 134 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	{
-		(*prs[eOcommand])(fsm->curline ,fsm->buf,fsm->p - fsm->buf);
-		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
-		printf("\nend_otag: %c\n",(*( fsm->p)));
+		b_o_command (fsm->curline ,fsm->buf,fsm->p - fsm->buf);
+//		fwrite( fsm->buf, 1, fsm->p - fsm->buf, stdout );
 	}
 	break;
-#line 620 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
+#line 510 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.c"
 		}
 	}
 	}
@@ -624,147 +514,21 @@ _again:
 	_out: {}
 	}
 
-#line 372 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
+#line 243 "/home/walery/workspace_cdt/gcode-lexer/mgParcer.rl"
 	
-		if ( format_finish( fsm ) <= 0 ){
-//			int as = 1;
-			printf("[898] FAIL :finish code:%d  %-10s \n", format_finish( fsm ) ,data);
-			assert(format_finish( fsm ) >= 1) ;
-		}
-
-	
+	return (format_finish( fsm ));
 }
 
 void init(){
 	format_init(&fsm);
 }
 
-void execute(char *data, int len){
+int execute(char *data, int len){
 	fsm.done = 0;
-	format_execute(&fsm, data, len, true);
+	return(format_execute(&fsm, data, len, true));
 }
 
 int finish(){
 	return (format_finish(&fsm));
 }
 
-#ifdef LOCAL_VERSION
-void scanner(){
-scannerstart:
-	switch (fsm.state)
-	{
-	case 0:
-		fsm.space = INPUT_BUFSIZE - fsm.have;
-		fsm.p = fsm.buf + fsm.have;
-		
-		if ( fsm.space == 0 ) {
-			/* We've used up the entire buffer storing an already-parsed token
-			 * prefix that must be preserved. */
-			fprintf(stderr, "OUT OF BUFFER SPACE\n" );
-			exit(1);
-		}
-	
-		fsm.lenfile = fread( fsm.buf+fsm.have, 1, fsm.space, fp );
-		
-		fsm.eofile = fsm.lenfile != fsm.space;
-		
-		format_execute( &fsm, fsm.p, fsm.lenfile, fsm.eofile );
-		fsm.state = 1;
-		 return;
-	
-	case 1:
-		if(fsm.done)
-		{
-			fsm.done = 0;
-			fsm.lenfile = INPUT_BUFSIZE - (fsm.pe - fsm.buf);
-			format_execute( &fsm, fsm.pe, fsm.lenfile, fsm.eofile );
-			return;
-		}
-	case 3:
-//		printf("[646] done:  %i \n", fsm.done);
-		if ( fsm.eofile ){
-//			fprintf(stderr, " [650] EOF lenfile:%i  space:%i \n", fsm.lenfile , fsm.space);
-			return;
-		//	break;
-		}	
-		
-		if ( fsm.ts == 0 ){
-			fsm.have = 0;
-		}
-		else {
-			/* There is a prefix to preserve, shift it over. */
-			fsm.have = fsm.pe - fsm.ts;
-			memmove( fsm.buf, fsm.ts, fsm.have );
-			fsm.te = fsm.buf + (fsm.te-fsm.ts);
-			fsm.ts = fsm.buf;
-		}
-	
-	}
-	
-	fsm.state = 0;
-	goto scannerstart;
-
-}
-
-#ifndef SCANNER
-int _main(int argc, char* argv[])
-{
-
-//	int eofile;
-//	int len;
-
-	fsm.buf = buf;
-	format_init( &fsm );
-
-	char* gfile = "exmple.gcode";
-	char* logFile = "gParcer.log";
-	
-	if(argc == 2){
-		gfile = argv[1];
-		printf("main[832] param0:%s\n",argv[1]);
-	}
-	
-	if(argc == 3){
-		gfile = argv[1];
-		logFile = argv[2];
-		printf("main[841] gfile:%s\n",gfile);
-		printf("main[842] logFile:%s\n",logFile);
-	}
-	
-	
-	fp = fopen(gfile,"r");
-	   if (fp==NULL) 
-	   {
-//	   fputs ("File error:"+gfile,stderr); exit (1);
-		   fprintf(stderr,"File error: %s",gfile);
-	   }else{
-		   printf("Open G-file:%s\n",gfile);
-	   
-	   }
-	   
-	   
-	flog = fopen(logFile,"w");
-	   if (flog==NULL) {
-//		   fputs ("File error",stderr); exit (1);
-		   fprintf(stderr,"Log file error:%s",logFile);
-	   }else{
-		   printf("Open log file:%s\n",logFile);
-	   }
-
-
-	while(!fsm.eof)
-	{	
-		scanner();
-	}
-	
-	if ( format_finish( &fsm ) <= 0 )
-		printf("[679] FAIL  %li \n", (unsigned long)&fsm);
-
-	printf("main[871]:  %i \n", format_finish( &fsm ));
-	
-	fclose(fp);
-	fclose(flog);
-	return 0;
-}
-#endif
-#endif
